@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .input-group {
+        height: $input-height;
+    }
+
+    .card:hover{
+        -webkit-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+        -mox-box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+        -box-shadow: -1px 9px 40px -12px rgba(0,0,0,0.75);
+    }
+
+    </style>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--Favicon-->
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <title>FeelM</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='clean-blog.min.css') }}" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
+
+
+</head>
+
+<body>
+
+{% if error_message %}
+
+<script type="text/javascript">
+    $(window).on('load',function(){
+        $('#error_modal').modal('show');
+    });
+
+
+</script>
+
+<div id="error_modal" class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="color:red;" id="exampleModalLongTitle">Error!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div style="font-size:17px;" class="modal-body">
+                {{ error_message }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <i class="fas fa-theater-masks"></i> FeelM
+        </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('data_analysis') }}">Data Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('top_results') }}">Top Results</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<header class="masthead" id="search_bar"
+        style="background-image: url('{{ url_for('static', filename='film_image_3.jpg') }}')">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1> Welcome to FeelM </h1>
+                    <span class="subheading">An online platform for movie sentiment analysis</span>
+                    <form action="#" method="post">
+                        <input name="movie" id="movie" style="margin-top: 20px;" type="text"
+                               class="form-control" placeholder="Enter a movie name..." required>
+                        <div class="invalid-feedback">
+                            Please enter a value.
+                        </div>
+                        <p>
+                            <input style="text-decoration:none" type="submit" value="Search" name="search"
+                                   class="btn btn-success rounded-lg">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% if movies %}
+
+<div id="content_section_1" class="card-columns col-lg-8 col-md-10 mx-auto">
+
+    {% for key, movie in movies.items() %}
+    <div class="card">
+        {% if movie.image == '' %}
+        <img src="{{ url_for('static', filename='no_image_available.jpg') }}"
+             class="card-img-top">
+        {% else %}
+        <img src="{{ movie.image }}" class="card-img-top">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ movie.title }}</h5>
+            <p class="card-text" style="font-size: 17px;"> {{ movie.plot }} </p>
+            <p class="card-text" style="font-size: 17px;"> {{ movie.description }} </p>
+        </div>
+        <div class="card-footer text-center">
+            <form action="#content_section_2" method="post">
+                <input style="text-decoration:none" type="submit" name="Analyze" value="Analyze"
+                       class="btn btn-success rounded-lg">
+                <input type="hidden" name="movie_id" value="{{ movie.movie_id }}">
+                <input type="hidden" name="movie_name" value="{{ movie.title }}">
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="col-lg-8 col-md-10 mx-auto text-center">
+    <p>Couldn't find any movies. Please try again...</p>
+</div>
+
+{% endif %}
+
+<div id="content_section_2" class="container" style="margin-top : 40px;">
+    <div class="row">
+        {% if graph_data %}
+
+        <div class="col-lg-8 col-md-10 mx-auto chart border rounded" id="{{ graph_data.chart_id|safe }}"></div>
+        <div class="col-lg-9 col-md-10 mx-auto text-center" style="margin-top : 40px;">
+            <h4>We predict that the movie will be:</h4>
+            <br>
+            <div class="row">
+
+                {% if sentiment=='Very Negative' %}
+                <div class="col">
+                    <h6 style="color: #ff0000;">Very Negative</h6>
+                    <i class="fas fa-sad-cry fa-2x" style="color: #ff0000;"></i>
+                </div>
+                {% else %}
+                <div class="col">
+                    <h6>Very Negative</h6>
+                    <i class="fas fa-sad-cry fa-2x"></i>
+                </div>
+                {% endif %}
+
+                {% if sentiment=='Negative' %}
+                <div class="col">
+                    <h6 style="color: #ff8000;">Negative</h6>
+                    <i class="fas fa-frown fa-2x" style="color: #ff8000;"></i>
+                </div>
+                {% else %}
+                <div class="col">
+                    <h6 style>Negative</h6>
+                    <i class="fas fa-frown fa-2x"></i>
+                </div>
+                {% endif %}
+
+                {% if sentiment=='Neutral' %}
+                <div class="col">
+                    <h6 style="color: #ffff00;">Neutral</h6>
+                    <i class="fas fa-meh fa-2x" style="color: #ffff00;"></i>
+                </div>
+                {% else %}
+                <div class="col">
+                    <h6>Neutral</h6>
+                    <i class="fas fa-meh fa-2x"></i>
+                </div>
+                {% endif %}
+
+                {% if sentiment=='Positive' %}
+                <div class="col">
+                    <h6 style="color: #80ff00;">Positive</h6>
+                    <i class="fas fa-smile fa-2x" style="color: #80ff00;"></i>
+                </div>
+                {% else %}
+                <div class="col">
+                    <h6>Positive</h6>
+                    <i class="fas fa-smile fa-2x"></i>
+                </div>
+                {% endif %}
+
+                {% if sentiment=='Very Positive' %}
+                <div class="col">
+                    <h6 style="color: #00ff00;">Very Positive</h6>
+                    <i class="fas fa-laugh-beam fa-2x" style="color: #00ff00;"></i>
+                </div>
+                {% else %}
+                <div class="col">
+                    <h6>Very Positive</h6>
+                    <i class="fas fa-laugh-beam fa-2x"></i>
+                </div>
+                {% endif %}
+
+            </div>
+            <p> We tried to make our algorithm's score as accurate as possible by making it
+                relative to all movies ever searched on this website. You can read all about it in the Data Analysis
+                tab.
+                Until then, enjoy watching!
+            </p>
+        </div>
+
+        <script>
+            var chart_id = {{ graph_data.chart_id|safe }}
+            var chart = {{ graph_data.chart|safe }}
+            var title = {{ graph_data.title|safe }}
+            var yAxis = {{ graph_data.y_axis|safe }}
+            var xAxis = {{ graph_data.x_axis|safe }}
+            var series = {{ graph_data.series|safe }}
+        </script>
+        <script src="../static/highcharts.js"></script>
+        <script src="../static/exporting.js"></script>
+        <script src="../static/export-data.js"></script>
+        <script type="text/javascript" src="../static/graph.js"></script>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+            <p>
+            <div class="text-center">
+                <a href="#search_bar" style="text-decoration:none" type="button"
+                   class="btn btn-success rounded-lg">Back To Search</a>
+            </div>
+            </p>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto text-center">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="https://github.com/GuyShuster/FeelM" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <p class="copyright text-muted">Copyright &copy; FeelM 2020</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- Custom scrolling effects -->
+{% if scroll %}
+<script>
+    document.location.hash = '#' + '{{ scroll }}';
+    document.getElementById('{{ scroll }}').scrollIntoView();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+{% endif %}
+
+
+</body>
+
+</html>
