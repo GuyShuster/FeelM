@@ -203,3 +203,24 @@ default_graph = \
     }
 
 default_movie = ('0468569', 0.11203876025678318)
+
+top_results_default_movies = \
+    {0: {'title': "Hachi: A Dog's Tale",
+         'plot': '''A drama based on the true story of a college professor's bond
+         with the abandoned dog he takes into his home.''',
+         'image': 'https://image.tmdb.org/t/p/w500//cuuzSt0dzY6k9xduN9tTSCIUvZ7.jpg',
+         'director': '',
+         'release_date': '13 June 2009',
+         'genre': 'Drama, Family',
+         'movie_id': '1028532',
+         'score': '0.2891444259892686'},
+     1: {'title': 'Platoon',
+         'plot': '''As a young and naive recruit in Vietnam, Chris Taylor faces
+          a moral crisis when confronted with the horrors of war and the duality of man.''',
+         'image': 'https://image.tmdb.org/t/p/w500//8hDlxJZYCJJLRHbSk7hsRQ9SNp7.jpg',
+         'director': '',
+         'release_date': '19 December 1986',
+         'genre': 'Drama, War, Action',
+         'movie_id': '0091763',
+         'score': '-0.051241804744516437'}
+     }

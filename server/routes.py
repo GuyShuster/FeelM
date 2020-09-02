@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, session
 from server import app, ost_script, defaults, tmdb_script, welfords_algorithm, sentiment_analysis, db
 from server.db_and_models import SentimentHistory, DBException
 import os
@@ -72,42 +72,43 @@ def predict_sentiment(movie_id, avg_score):
 
 #  initialize defaults to appear on the opening page
 add_film_description(defaults.default_movies)
-searched_movies = defaults.default_movies
 
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    global searched_movies
     error_message = None
+
     if request.method == 'GET':
+        #  Each time a user accesses the website, we want to "freshly" log in and initialize the default searched movies
+        session['searched_movies'] = defaults.default_movies
+        ost_script.login(os.environ.get('OST_USER'), os.environ.get('OST_PASSWORD'))
         if not ost_script.logged_in:
             error_message = '''We could not log in to the Open Subtitles API.
             Please try to reload the page in a couple of minutes.
             If this message shows up again, please raise an issue on our github repository 
             (link at the bottom of this page).'''
-            ost_script.login(os.environ.get('OST_USER'), os.environ.get('OST_PASSWORD'))  # try to log in again
-        return render_template('index.html', movies=defaults.default_movies, graph_data=defaults.default_graph,
+        return render_template('index.html', movies=session['searched_movies'], graph_data=defaults.default_graph,
                                error_message=error_message, sentiment=predict_sentiment(defaults.default_movie[0],
                                                                                         defaults.default_movie[1]))
     else:
         if 'search' in request.form:
             movie_name = request.form['movie']
             try:
-                searched_movies = tmdb_script.tmdb_api(movie_name)
-                add_film_description(searched_movies)
-                return render_template('index.html', movies=searched_movies, scroll='content_section_1')
+                session['searched_movies'] = tmdb_script.tmdb_api(movie_name)
+                add_film_description(session['searched_movies'])
+                return render_template('index.html', movies=session['searched_movies'], scroll='content_section_1')
             except tmdb_script.TMDBConnectionException:
                 error_message = '''We could not connect to the TMDB API.
                             Please try to reload the page in a couple of minutes.
                             If this message shows up again, please raise an issue on our github repository 
                             (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
             except tmdb_script.TMDBParsingException:
                 error_message = '''Could not parse the data from the TMDB API correctly.
                             Please reload the page and try searching a different movie.
                             If this message shows up again, please raise an issue on our github repository 
                             (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
         else:
             movie_id = request.form['movie_id']
             try:
@@ -118,33 +119,34 @@ def index():
                             If you can find the chosen movie on the Open Subtitle website but can't analyze it here, 
                             please raise an issue on our github repository 
                             (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
             try:
                 sentiment_result = sentiment_analysis.get_sentiment(str(movie_id), encoding)
                 graph_data = defaults.default_graph
                 graph_data['series'] = [{'name': request.form['movie_name'], 'data': sentiment_result}]
                 os.remove(str(movie_id))
+
                 sentiment = predict_sentiment(movie_id, sentiment_analysis.average(sentiment_result))
-                return render_template('index.html', movies=searched_movies, graph_data=graph_data, sentiment=sentiment)
+                return render_template('index.html', movies=session['searched_movies'], graph_data=graph_data, sentiment=sentiment)
             except sentiment_analysis.SubtitleFileException:
                 error_message = '''Could not read the downloaded subtitle file correctly.
                                             Please reload the page and try it one more time.
                                             If this message shows up again, 
                                             please raise an issue on our github repository 
                                             (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
             except sentiment_analysis.SubtitleParsingException:
                 error_message = '''Could not parse the downloaded subtitle correctly.
                                             Please reload the page and try it one more time.
                                             If this message shows up again, 
                                             please raise an issue on our github repository 
                                             (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
             except DBException:
                 error_message = '''This is a database exception.
                                 please raise an issue on our github repository 
                                 (link at the bottom of this page).'''
-                return render_template('index.html', movies=searched_movies, error_message=error_message)
+                return render_template('index.html', movies=session['searched_movies'], error_message=error_message)
 
 
 @app.route('/about')
@@ -159,4 +161,4 @@ def data_analysis():
 
 @app.route('/top_results')
 def top_results():
-    return render_template('top_results.html')
+    return render_template('top_results.html', movies=defaults.top_results_default_movies)

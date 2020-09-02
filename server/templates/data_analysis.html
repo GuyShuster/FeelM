@@ -66,7 +66,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
                     <h1>Data Analysis</h1>
-                    <span class="subheading">A proof of concept and an explanation of our algorithm</span>
+                    <span class="subheading">In the following, we are going to show that our algorithm actually works.</span>
                 </div>
             </div>
         </div>
@@ -78,68 +78,170 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <p>Never in all their history have men been able truly to conceive of the world as one: a single sphere,
-                    a globe, having the qualities of a globe, a round earth in which all the directions eventually meet,
-                    in which there is no center because every point, or none, is center — an equal earth which all men
-                    occupy as equals. The airman's earth, if free men make it, will be truly round: a globe in practice,
-                    not in theory.</p>
+                <h2 class="section-heading text-center">Introduction</h2>
 
-                <p>Science cuts two ways, of course; its products can be used for both good and evil. But there's no
-                    turning back from science. The early warnings about technological dangers also come from
-                    science.</p>
+                <p>First, let's understand what the algorithm actually intends to do and what how to measure that it
+                    works.
+                    Sentiment analysis is a tool that is being used for a wide range of purposes. The classic one's are
+                    analyzing reviews and comments to draw a conclusion on a certain product or post.
+                    We took this algorithm and applied it to a work of arts - a movie, and we did it purely out of a
+                    research standpoint,
+                    with lots of curiosity towards the outcome. "How accurate is sentiment analysis really?" is what we
+                    asked ourselves.
+                </p>
 
-                <p>What was most significant about the lunar voyage was not that man set foot on the Moon but that they
-                    set eye on the earth.</p>
+                <p style="font-weight:bold;">The input of our algorithm is a movie name and the output is a graph and
+                    smiley face representing a
+                    sentiment,
+                    but clearly there is much more to it than that, since sentiment scores don't always behave as
+                    expected and need to be normalized.
+                    For more information and an explanation of the algorithm and it's details,
+                    please scroll down to the bottom of this page.</p>
 
-                <p>A Chinese tale tells of some men sent to harm a young girl who, upon seeing her beauty, become her
-                    protectors rather than her violators. That's how I felt seeing the Earth for the first time. I could
-                    not help but love and cherish her.</p>
+                <p>The main thing that is common for all of the different purposes is the need to classify
+                    something as "sad" (negative) and "happy" (positive), on various scales (see our smiley faces in the
+                    bottom of the home page).
+                    It is not always clear what is the definition of "sad" or "happy", in most cases it is not "black or
+                    white", but
+                    way more complicated. We can all agree that usually a horror movie is going to be less positive than
+                    a comedy,
+                    but trust us - there are some dark comedies out there.
+                    Therefore, in order to test our results and measure our algorithm against a human eye
+                    we have decided to rate some popular movies which most of
+                    their viewers should have a common idea regarding their happiness rate.</p>
 
-                <p>For those who have seen the Earth from space, and for the hundreds and perhaps thousands more who
-                    will, the experience most certainly changes your perspective. The things that we share in our world
-                    are far more valuable than those which divide us.</p>
+                <h2 class="section-heading text-center">Examples</h2>
 
-                <h2 class="section-heading">The Final Frontier</h2>
+                <h2 class="section-heading">Ted</h2>
+                <img class="img-fluid" src="../static/ted.jpg"/>
 
-                <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it
-                    is a task to occupy the generations. And no matter how much progress one makes, there is always the
-                    thrill of just beginning.</p>
+                <p class="text-center" style="font-weight:bold;">Score: 0.09075629937262922</p>
 
-                <p>There can be no thought of finishing for ‘aiming for the stars.’ Both figuratively and literally, it
-                    is a task to occupy the generations. And no matter how much progress one makes, there is always the
-                    thrill of just beginning.</p>
+                <p>Ted is a comedy about a man named John Bennett, a man who's childhood wish of bringing his teddy bear
+                    to life came true,
+                    now must decide between keeping the relationship with the bear or his girlfriend, Lori.</p>
 
-                <blockquote class="blockquote">The dreams of yesterday are the hopes of today and the reality of
-                    tomorrow. Science has not yet mastered prophecy. We predict too much for the next year and yet far
-                    too little for the next ten.
-                </blockquote>
+                <p>Ted is a very funny movie, which will make most of the people watching it laugh a lot.
+                    Surprisingly it actually got a very low score, lower than other movies we checked which are
+                    agreeably "sadder". Why does this happen?</p>
 
-                <p>Spaceflights cannot be stopped. This is not the work of any one man or even a group of men. It is a
-                    historical process which mankind is carrying out in accordance with the natural laws of human
-                    development.</p>
+                <p>The reason for this is because the algorithm receives movie subtitles as an input, while the
+                    movie uses a lot of "bad" language and profanity, and the algorithm can't tell the true intent
+                    behind a joke.
+                    There might be a lot of sarcastic sentences which may come off as offensive and negative if you only
+                    "read" them,
+                    But if you see the body language of the actor or the situation the sentence was said in, you'll
+                    change your mind for sure.</p>
 
-                <h2 class="section-heading">Reaching for the Stars</h2>
+                <p>We put this example here on purpose to show that the algorithm is experimental and not perfect, nor
+                    we intend it to be.
+                    It might work well on more "vanilla" type comedies and children's movies versus horror and tragedy
+                    movies (extreme cases),
+                    but human communication is far more complex than just written words. Body language, movement,
+                    context and even background music
+                    all come into play when communicating emotion,
+                    but in the general cases our algorithm actually serves it's purpose. See the TOP RESULTS page :)</p>
+                <h2 class="section-heading">Friends with Benefits</h2>
+                <img class="img-fluid" src="../static/friends_with_benefits.jpg"/>
 
-                <p>As we got further and further away, it [the Earth] diminished in size. Finally it shrank to the size
-                    of a marble, the most beautiful you can imagine. That beautiful, warm, living object looked so
-                    fragile, so delicate, that if you touched it with a finger it would crumble and fall apart. Seeing
-                    this has to change a man.</p>
+                <p class="text-center" style="font-weight:bold;">Score: 0.18952686192515367</p>
 
-                <a href="#">
-                    <img class="img-fluid" src="../static/film_image_1.jpg" alt="">
-                </a>
-                <span class="caption text-muted">To go places and do things that have never been done before – that’s what living is all about.</span>
+                <p>Jamie Rellis (Mila Kunis) is a New York City head-hunter trying to sign Los Angeles-based art
+                    director Dylan Harper (Justin Timberlake) for her client.
+                    When he takes the job and makes the move, they quickly become friends. Their friendship turns into a
+                    friendship with benefits, but with Jamie's emotionally damaged past and Dylan's history of being
+                    emotionally unavailable, they have to try to not fall for each other the way Hollywood
+                    romantic comedies dictate.</p>
 
-                <p>Space, the final frontier. These are the voyages of the Starship Enterprise. Its five-year mission:
-                    to explore strange new worlds, to seek out new life and new civilizations, to boldly go where no man
-                    has gone before.</p>
+                <p>Friends with benefits is a very easy going and fun movie. It talks a lot about relationships and
+                    love, and this
+                    can explain why it got a very high and accurate score.
+                    This shows how comedies can be very light language-wise, as opposed to Ted for example.
+                    Many conclusions can be drawn from this fact. Age restrictions on films may be
+                    calculated and verified by an algorithm, for example.
 
-                <p>As I stand out here in the wonders of the unknown at Hadley, I sort of realize there’s a fundamental
-                    truth to our nature, Man must explore, and this is exploration at its greatest.</p>
+                <h2 class="section-heading">The Wolf of Wall Street</h2>
+                <img class="img-fluid" src="../static/wolf_of_wall_street.jpg"/>
 
-                <p>Placeholder text by
-                    <a href="http://spaceipsum.com/">Space Ipsum</a>. Photographs by
-                    <a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>.</p>
+                <p class="text-center" style="font-weight:bold;">Score: -0.01653886156971727</p>
+
+                <p>The movie is about Jordan Belfort who is a Long Island penny stockbroker who served 22 months in
+                    prison
+                    for defrauding investors
+                    in a massive 1990s securities scam that involved widespread corruption on Wall Street and in the
+                    corporate banking world.</p>
+
+                <p>The Wolf of Wall Street is a very intense movie, that also has a lot of bad language and it is
+                    definitely
+                    not a very positive movie, and indeed it received a low score.
+                    On the other hand it is also not a classic "sad" and emotional movie. From this we learn that the
+                    algorithm
+                    doesn't consider only "emotional" kind of sadness as "sad", but also intense movies with a lot of
+                    fights, stress and profanity, and in our opinion it got a pretty accurate score this time.</p>
+
+
+                <h2 class="section-heading">Get Out</h2>
+                <img class="img-fluid" src="../static/get_out.jpg"/>
+                <p class="text-center" style="font-weight:bold;">Score: 0.051873143852899394</p>
+
+                <p>Chris and his girlfriend Rose go upstate to visit her parents for the weekend. At first, Chris reads
+                    the family's overly accommodating behavior as nervous attempts to deal with their daughter's
+                    interracial relationship, but as the weekend progresses, a series of increasingly disturbing
+                    discoveries lead him to a truth that he never could have imagined.</p>
+                <p>The first word that comes to mouth when thinking about this movie is "scary". This movie can
+                    definitely NOT be considered as a positive movie, despite the OK ending.
+                    We can see that our algorithm was completely right this time. The movie received a low
+                    score as it should have</p>
+
+                <h2 class="section-heading">The Avengers</h2>
+                <img class="img-fluid" src="../static/the_avengers.jpeg"/>
+
+                <p class="text-center" style="font-weight:bold;">Score: 0.05744215499551452</p>
+
+                <p>The "Avengers" movie brings together many of the known Marvel heroes into a one movie where they need
+                    to
+                    fight together. Loki, the adopted brother of Thor, teams-up with the Chitauri Army and uses the
+                    Tesseract's power to
+                    travel from Asgard to Midgard to plot the invasion of Earth and become a king.
+                    The director of the agency S.H.I.E.L.D., Nick Fury, sets in motion project Avengers, joining Tony
+                    Stark a.k.a. the Iron Man; Steve Rogers, a.k.a. Captain America; Bruce Banner, a.k.a.
+                    The Hulk; Thor; Natasha Romanoff, a.k.a. Black Widow; and Clint Barton, a.k.a. Hawkeye, to save the
+                    world from the powerful Loki and the alien invasion.</p>
+
+                <p>The avengers is an action movie, which many would consider as "happy", mainly because of all the
+                    special effects and the entertaining visuals it has.
+                    As many other action movies, it has less "talking" and a lot of fights between good and evil.
+                    The talking are usually goal oriented, and uses terms like "fight", "destroy" and "kill" which may
+                    be interpreted as negative.
+                    Based on this we can see why it got a low score, but we have to remember that if we take away the
+                    amusing part
+                    of action movies and analyze just the language compared to drama movies for example, even without a
+                    computer's
+                    help we can see
+                    that the dramatic nature of the language stays.
+                    This tells us a lot about how we interpret emotion and what is positive and negative to us, but also
+                    shows us
+                    that sentiment analysis is no joke :)</p>
+
+                <h2 class="section-heading">Pirates of the Caribbean</h2>
+                <img class="img-fluid" src="../static/pirates_of_the_caribbean.jpg"/>
+                <p class="text-center" style="font-weight:bold;">Score: 0.08323822717194623</p>
+
+                <p>Pirates of the Caribbean is a sweeping action-adventure story set in an era when villainous pirates
+                    scavenged the Caribbean seas. This roller coaster tale teams a young man, Will Turner, with an
+                    unlikely ally in rogue pirate Jack Sparrow. Together, they must battle a band of the world's most
+                    treacherous pirates, led by the cursed Captain
+                    Barbossa, in order to save Elizabeth, the love of Will's life, as well as recover the lost treasure
+                    that Jack seeks. Against improbable odds,
+                    they race towards a climactic confrontation on the mysterious Isla de Muerta. Clashing their swords
+                    in fierce mortal combat, Will and Jack attempt to recapture The Black Pearl ship, save the British
+                    navy, and relinquish a fortune in forbidden treasure thereby lifting the curse of the Pirates of the
+                    Caribbean.</p>
+
+                <p> On One hand, this movie has a happy side, it is a bit funny and it has amusing characters. On
+                    the other hand, it has a lot of fights and dramatic moments.
+                    The mix of the two can explain why it got a pretty neutral score - which is also pretty
+                    accurate.</p>
             </div>
         </div>
     </div>
@@ -168,3 +270,4 @@
 </body>
 
 </html>
+

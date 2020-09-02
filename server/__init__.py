@@ -1,10 +1,14 @@
 from flask import Flask
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from server import tmdb_script, ost_script, defaults, welfords_algorithm
 import os
 
 ENV = 'dev'  # DON'T FORGET TO CHANGE TO prod WHEN DEPLOYING TO A PRODUCTION SERVER
 app = Flask(__name__)
+SESSION_TYPE = 'filesystem'  # store session related data on the file system for security and efficiency
+app.config.from_object(__name__)
+Session(app)
 
 ########################################################################################################################
 
@@ -20,15 +24,13 @@ elif ENV == 'prod':
 
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 db = SQLAlchemy(app)
 
 ########################################################################################################################
 
 #  initialize TMDB API
 tmdb_script.initiate_api(os.environ.get('TMDB_KEY'))
-#  initialize OpenSubtitles API
-ost_script.login(os.environ.get('OST_USER'), os.environ.get('OST_PASSWORD'))
 #  initialize Welford's algorithm for the normal distribution calculation of the movie sentiment scores (smiley faces)
 welfords_algorithm.initialize([movie_tuple[1] for movie_tuple in defaults.initial_movie_scores])
 #  database initialization happens automatically in the db_and_models.py script
