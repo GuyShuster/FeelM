@@ -66,7 +66,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
                     <h1>Data Analysis</h1>
-                    <span class="subheading">Explanation of our algorithm and comparison to human scores</span>
+                    <span class="subheading">A comparison between our algorithm's and human scores</span>
                 </div>
             </div>
         </div>
@@ -89,16 +89,6 @@
                     with lots of curiosity towards the outcome. "How accurate is sentiment analysis really?" is what we
                     asked ourselves when we decided to go through with this project.
                 </p>
-
-                <p>The input of our algorithm is a movie name and the output is a graph and
-                    smiley face representing a
-                    sentiment,
-                    but clearly there is much more to it than that, since sentiment scores don't always behave as
-                    expected and need to be normalized.</p>
-
-                <p style="font-weight:bold; color: red;">FOR MORE INFORMATION AND A DETAILED EXPLANATION OF THE
-                    ALGORITHM,
-                    PLEASE SCROLL DOWN TO THE BOTTOM OF THIS PAGE.</p>
 
                 <p>The main thing that is common for all of the different purposes of sentiment analysis is the need to
                     classify
@@ -240,49 +230,7 @@
                     The mix of the two can explain why it got a pretty neutral score - which is also pretty
                     accurate.</p>
 
-                <h2 class="section-heading text-center">How It All Works</h2>
 
-                <p> In this section, we will try to explain how our algorithm works. It is pretty complex as a whole,
-                    but when simplified
-                    and divided into sub-components you should get it right away.
-                    <br>
-                    The sub components we are referring to are:</p>
-                <ul>
-                    <li>The TMDB API component</li>
-                    <li>The Open Subtitles API component</li>
-                    <li>The Sentiment Analysis component</li>
-                    <li>The Welford's Algorithm component</li>
-                </ul>
-                <p> These all get called in the specified order (from top to bottom), and stop only if there is an
-                    exception along the way.</p>
-
-                <h2 class="section-heading">The TMDB API component</h2>
-                <p> This component is pretty straightforward. It receives a movie name that the user types in the UI,
-                    and calls the search on the TMDB API with that name, and returns a dictionary of movie related data
-                    such as the image, plot, genre, release date and the IMDB ID that will be used later by the
-                    following components.</p>
-
-
-                <h2 class="section-heading">The Open Subtitles API component</h2>
-                <p> After the movie results are presented to the user and he chooses the movie he wants to analyze,
-                    the server calls the Open Subtitles API with the IMDB ID of the chosen movie, and picks the subtitle
-                    file that was most highly ranked
-                    and makes sure it's format is correct and that it is in the english language. If the component can't
-                    find a subtitle of the chosen movie or
-                    if the download fails for some reason, an exception is thrown to the UI.</p>
-
-                <h2 class="section-heading">The Sentiment Analysis component</h2>
-                <p> This component is the heart of all our work. It uses TextBlob, which is a well known and easy to use
-                    python library for processing textual data,
-                    and has sentiment analysis support in particular, which is exactly what we
-                    needed.<br>
-                    This component has 4 steps:</p>
-                <ul>
-                    <li>Collect the subtitles and their time intervals from the srt file</li>
-                    <li>Divide the total movie running time into constant time intervals</li>
-                    <li>Collect and combine all of the text in each time interval</li>
-                    <li>Find the sentiment polarity of the text in each time interval</li>
-                </ul>
 
             </div>
         </div>

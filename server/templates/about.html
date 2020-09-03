@@ -67,7 +67,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
                     <h1>About Us</h1>
-                    <span class="subheading">A brief explanation of our project</span>
+                    <span class="subheading">A complete explanation of our project</span>
                 </div>
             </div>
         </div>
@@ -78,12 +78,18 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            <h2 class="section-heading text-center">Summary</h2>
+
             <p>Our project is a research project in the digital humanities field, and it took place
-                under the guidance of <a href="https://www.cs.bgu.ac.il/~yaeln/">Dr. Yael Netzer</a>
-                in the <a href="https://www.cs.bgu.ac.il/~tdh201/Main">Digital Humanities Course</a>
-                in the <a href="https://in.bgu.ac.il/en/pages/default.aspx">BGU University of The Negev</a>.
+                under the guidance of <a target="_blank" href="https://www.cs.bgu.ac.il/~yaeln/">Dr. Yael Netzer</a>
+                in the <a target="_blank" href="https://www.cs.bgu.ac.il/~tdh201/Main">Digital Humanities Course</a>
+                in the <a target="_blank" href="https://in.bgu.ac.il/en/pages/default.aspx">BGU University of The
+                    Negev</a>.
             </p>
-            <p>This project was intended to try something that has never been done before: applying Sentiment Analysis
+            <p>This project was intended to try something that has never been done before: applying
+                <a target="_blank"
+                   href="https://en.wikipedia.org/wiki/Sentiment_analysis#:~:text=Sentiment%20analysis%20(also%20known%20as,affective%20states%20and%20subjective%20information.">Sentiment
+                    Analysis</a>
                 (a language processing technique) to a work of arts, specifically a movie, therefore combining the
                 digital world with the
                 world
@@ -93,14 +99,191 @@
                 the how accurate (or not sometimes) textual analysis can be, and how important (or not sometimes) is non
                 verbal communication
                 in our society.</p>
-            <p>We developed this project using Flask - a python web development library, with the help of Bootstrap,
-                Jquery and the Highcharts library to enhance the UI and user experience.
-                Searching the movies was done through the TMDB movie API, and we downloaded the subtitles from the
-                OpenSubtitles API.
-                The sentiment analysis of the subtitles was done with TextBlob, and scoring algorithm and normalization
-                was achieved with the help of a small PostgreSQL database and Welford's algorithm for calculating a
+            <p>We developed this project using <a target="_blank" href="https://flask.palletsprojects.com/en/1.1.x/">
+                Flask</a> - a python web development library, with the help of <a target="_blank" href="https://getbootstrap.com/">
+                Bootstrap</a>,
+                <a target="_blank" href="https://jquery.com/">Jquery</a> and the
+                <a target="_blank" href="https://www.highcharts.com/">Highcharts</a>
+                library to enhance the UI and user experience.
+                Searching the movies was done through the <a target="_blank" href="https://www.themoviedb.org/">TMDB movie API</a>,
+                and we downloaded the subtitles from the
+                <a target="_blank" href="https://www.opensubtitles.org/en/search/subs">OpenSubtitles API</a>.
+                The sentiment analysis of the subtitles was done with  <a target="_blank" href="https://textblob.readthedocs.io/en/dev/">
+                    TextBlob</a>, and scoring algorithm and relative
+                grading
+                was achieved with the help of a small  <a target="_blank" href="https://www.postgresql.org/">PostgreSQL</a>
+                database and <a target="_blank"
+                   href="https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm">
+                    Welford's Online Algorithm</a> for calculating a
                 running mean and standard deviation (further credits are in the source code).</p>
             <p>We are Guy Shuster, Ori Benami and Tomer Elgavish, and we hope you enjoy!</p>
+
+            <h2 class="section-heading text-center">How It All Works</h2>
+
+            <p> In this section, we will try to explain how our algorithm works. It is pretty complex as a whole,
+                but when simplified
+                and divided into sub-components you should get it right away.
+                The sub components we are referring to are:</p>
+            <ul>
+                <li>The TMDB API component</li>
+                <li>The Open Subtitles API component</li>
+                <li>The Sentiment Analysis component</li>
+                <li>The Relative Grading component</li>
+            </ul>
+            <p> These all get called in the specified order (from top to bottom), and stop only if there is an
+                exception along the way.</p>
+
+            <h2 class="section-heading">TMDB API</h2>
+            <p> This component is pretty straightforward. It receives a movie name that the user types in the UI,
+                and calls the search on the TMDB API with that name, and returns a dictionary of movie related data
+                such as the image, plot, genre, release date and the IMDB ID that will be used later by the
+                following components.</p>
+
+
+            <h2 class="section-heading">Open Subtitles API</h2>
+            <p> After the movie results are presented to the user and he chooses the movie he wants to analyze,
+                the server calls the Open Subtitles API with the IMDB ID of the chosen movie, and picks the subtitle
+                file that was most highly ranked
+                and makes sure it's format is correct and that it is in the English language. If the component can't
+                find a subtitle of the chosen movie or
+                if the download fails for some reason, an exception is thrown to the UI.</p>
+
+            <h2 class="section-heading">Sentiment Analysis</h2>
+            <p> This component is the heart of all our work. It uses TextBlob, which is a well known and easy to use
+                python library for processing textual data,
+                and has sentiment analysis support in particular, which is exactly what we
+                needed.<br>
+                There are 4 major steps:</p>
+            <ul>
+                <li>Collect the subtitles and their time intervals from the srt file</li>
+                <li>Divide the total movie running time into constant time intervals</li>
+                <li>Collect and combine all of the text in each time interval</li>
+                <li>Find the sentiment polarity of the text in each time interval</li>
+            </ul>
+            <p>The first step is where the algorithm reads the downloaded srt file, and saves it as an array of
+                tuples.
+                Each tuple is constructed of the subtitle text, and the start time and end time of that text.
+                It's important to note that subtitles don't have constant time intervals.
+            </p>
+            <p>
+                In the next step, we programmatically create an array of constant time intervals (default length is
+                2 minutes per interval).
+                If we didn't go through this process, the subtitle scores might have been very unstable and unevenly
+                distributed, and we don't want that to happen.
+            </p>
+            <p>
+                The third step is a combination of the first two. For each time interval created in step 2, we
+                collect
+                the text that "fits" that interval from step 1, and save the new tuples in a similar manner.
+            </p>
+            <p>
+                After all the previous steps, this one is pretty straightforward. All we do here is create a
+                TextBlob object out of the collected text of each interval from the previous step, and save the
+                result
+                for future use.
+
+            </p>
+
+            <h2 id="algorithm" class="section-heading">Relative Grading</h2>
+            <p>
+                This is where all the magic happens.
+                <b style="color:red;">If you arrived here from the main page, please catch up on the
+                    previous sections.</b>
+            </p>
+            <p>
+                When we first started designing the front page, we realized that showing a graph and an average
+                score of some movie is not the best option from a user experience perspective, and we need to
+                show something more tangible as a main result of the algorithm.
+                That's where we came up with the 5 grade system,
+                and that's where things started to get a bit complicated.
+            </p>
+            <p>
+                We knew that the algorithm must give us an average score from -1 to 1 per movie. The first instinct
+                was to divide this interval into 5 even lengths, and let the movie score fall into the appropriate
+                one. This is pretty reasonable, but not at all accurate in our case,
+                because unfortunately the movie average scores are not at all evenly distributed across this
+                interval.<br>
+                Apparently the average sentiment movie scores are very unpredictable, and have their own scale.
+                We needed to find a way to grade a new movie based on all/some of the movies searched before it.
+            </p>
+            <p>
+                After we did some thinking, we were able to translate our problem to a much simpler one.
+                Imagine a class of students that went through a really hard test, and the average of their scores was
+                30/100.
+                You are the teacher and you can't fail all of the students because you'll get fired, and so you must
+                divide their scores in a fair manner into a five grade system. <br>
+                See the resemblance yet? the movie scores we get from the algorithm are the students with the bad
+                grades, and whe UI is the teacher that has to show a score ranging from 1 to 5 to the user.<br>
+                This is called <a target="_blank" href="https://en.wikipedia.org/wiki/Relative_grading">Relative
+                Grading</a>,
+                and all of it can be done only if the data is normally distributed.
+            </p>
+
+            <img class="img-fluid" src="../static/normal_dist.PNG"/>
+            <p class="text-center" style="font-weight:bold;">
+                Skew: 0.065351559550138 <br>
+                Kurtosis: 0.3434370467550383 <br>
+                Shapiro-Wilk: W: 0.9965498447418213 p=0.6612211465835571
+            </p>
+            <p>
+                In the diagram above you can see the histogram of the IMDB's top 250 movies, graded for sentiment by our
+                algorithm.
+                It looks pretty normally distributed, but we had to verify that mathematically.
+                We performed 3 tests on the data, calculating it's skew, kurtosis and even performed a Shapiro-Wilk test
+                on it to be completely sure.
+                The
+                <a target="_blank"
+                   href="https://codeburst.io/2-important-statistics-terms-you-need-to-know-in-data-science-skewness-and-kurtosis-388fef94eeaa">
+                    skew and kurtosis</a>
+                are close to zero, and
+                <a target="_blank" href="https://www.jmp.com/support/notes/35/406.html">the p value in the Shapiro-Wilk
+                    test</a>
+                is between -0.5
+                and 0.5.
+                Knowing that the data of 250 movies is normally distributed, we may assume that more movies won't change
+                that fact
+                and proceed to the next and final step - the grading itself.
+            </p>
+            <p>
+                The idea of what we are doing here is simple. Our website has a small PostgreSQL database,
+                that can store up to 10,000 of the lastly searched movies on this website.
+                Every time a user logs into our website, we calculate the mean and standard deviation of the
+                whole history of movies (two values needed for relative grading) we saved in the database,
+                and attach these values to the user's session.
+                When the user searches a new movie, we add that score to the whole history of 10,000 movies searched
+                on the website, and give it a score from 1 to 5 with relevance to that history of movie scores.
+                It's important to note that the database behaves like a queue of maximum 10,000 values,
+                but that is only because of the restrictions of our plan on the
+                <a target="_blank" href="https://www.heroku.com/">Heroku</a> platform.
+            </p>
+            <p>
+                Response time and application scaling were important to us, so we had to find a proper way to calculate
+                the two main values we need for grading on a <br>
+                curve - the <a target="_blank" href="https://en.wikipedia.org/wiki/Mean">mean</a>
+                and the <a target="_blank" href="https://en.wikipedia.org/wiki/Standard_deviation">standard
+                deviation</a>.
+                The mean is simple to calculate in an online running manner, but a standart deviation is a whole
+                different story.
+                We were lucky to find the
+                <a target="_blank"
+                   href="https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm">
+                    Welford's Online Algorithm</a> to help us with that fact.
+                If we didn't have that algorithm, we would have to calculate a mean of approximately 10,000 values
+                fetched from a remote database
+                (assuming that the application won't grow bigger than that someday) on each user request for a new movie
+                - not very efficient. <br>
+                With the help of that algorithm, we are able to crate a sort of image of the database in our volatile
+                memory of the program itself, and add movie scores to it as we go, without referencing the database
+                itself until the user session expires or until the main page is reloaded.
+            </p>
+            <p>
+                We are pretty confident that this method is pretty unique for this field,
+                since we haven't seen it used anywhere in our prior research.
+                The same method can be used for analyzing and grading movie reviews for example,
+                or any other kinds of reviews
+                for that matter, which are more common around the sentiment analysis field.
+            </p>
+
 
         </div>
     </div>
