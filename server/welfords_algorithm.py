@@ -70,16 +70,3 @@ class Welford(object):
 
     def __repr__(self):
         return "<Welford: {} +- {}>".format(self.mean, self.std)
-
-
-welfrod = Welford()
-
-
-def initialize(iterable):
-    global welfrod
-    welfrod = Welford()
-    welfrod(iterable)
-
-
-def add(avg):
-    welfrod([avg])

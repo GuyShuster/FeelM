@@ -31,8 +31,6 @@ db = SQLAlchemy(app)
 
 #  initialize TMDB API
 tmdb_script.initiate_api(os.environ.get('TMDB_KEY'))
-#  initialize Welford's algorithm for the normal distribution calculation of the movie sentiment scores (smiley faces)
-welfords_algorithm.initialize([movie_tuple[1] for movie_tuple in defaults.initial_movie_scores])
 #  database initialization happens automatically in the db_and_models.py script
 
 ########################################################################################################################

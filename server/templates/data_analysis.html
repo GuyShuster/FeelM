@@ -66,7 +66,7 @@
             <div class="col-lg-8 col-md-10 mx-auto">
                 <div class="page-heading">
                     <h1>Data Analysis</h1>
-                    <span class="subheading">In the following, we are going to show that our algorithm actually works.</span>
+                    <span class="subheading">Explanation of our algorithm and comparison to human scores</span>
                 </div>
             </div>
         </div>
@@ -87,18 +87,21 @@
                     We took this algorithm and applied it to a work of arts - a movie, and we did it purely out of a
                     research standpoint,
                     with lots of curiosity towards the outcome. "How accurate is sentiment analysis really?" is what we
-                    asked ourselves.
+                    asked ourselves when we decided to go through with this project.
                 </p>
 
-                <p style="font-weight:bold;">The input of our algorithm is a movie name and the output is a graph and
+                <p>The input of our algorithm is a movie name and the output is a graph and
                     smiley face representing a
                     sentiment,
                     but clearly there is much more to it than that, since sentiment scores don't always behave as
-                    expected and need to be normalized.
-                    For more information and an explanation of the algorithm and it's details,
-                    please scroll down to the bottom of this page.</p>
+                    expected and need to be normalized.</p>
 
-                <p>The main thing that is common for all of the different purposes is the need to classify
+                <p style="font-weight:bold; color: red;">FOR MORE INFORMATION AND A DETAILED EXPLANATION OF THE
+                    ALGORITHM,
+                    PLEASE SCROLL DOWN TO THE BOTTOM OF THIS PAGE.</p>
+
+                <p>The main thing that is common for all of the different purposes of sentiment analysis is the need to
+                    classify
                     something as "sad" (negative) and "happy" (positive), on various scales (see our smiley faces in the
                     bottom of the home page).
                     It is not always clear what is the definition of "sad" or "happy", in most cases it is not "black or
@@ -122,7 +125,8 @@
                     now must decide between keeping the relationship with the bear or his girlfriend, Lori.</p>
 
                 <p>Ted is a very funny movie, which will make most of the people watching it laugh a lot.
-                    Surprisingly it actually got a very low score, lower than other movies we checked which are
+                    Surprisingly, it didn't get a very high score, and was ranked lower than other movies we checked
+                    which are
                     agreeably "sadder". Why does this happen?</p>
 
                 <p>The reason for this is because the algorithm receives movie subtitles as an input, while the
@@ -130,7 +134,7 @@
                     behind a joke.
                     There might be a lot of sarcastic sentences which may come off as offensive and negative if you only
                     "read" them,
-                    But if you see the body language of the actor or the situation the sentence was said in, you'll
+                    but if you see the body language of the actor or the situation the sentence was said in, you'll
                     change your mind for sure.</p>
 
                 <p>We put this example here on purpose to show that the algorithm is experimental and not perfect, nor
@@ -198,20 +202,13 @@
 
                 <p class="text-center" style="font-weight:bold;">Score: 0.05744215499551452</p>
 
-                <p>The "Avengers" movie brings together many of the known Marvel heroes into a one movie where they need
-                    to
-                    fight together. Loki, the adopted brother of Thor, teams-up with the Chitauri Army and uses the
-                    Tesseract's power to
-                    travel from Asgard to Midgard to plot the invasion of Earth and become a king.
-                    The director of the agency S.H.I.E.L.D., Nick Fury, sets in motion project Avengers, joining Tony
-                    Stark a.k.a. the Iron Man; Steve Rogers, a.k.a. Captain America; Bruce Banner, a.k.a.
-                    The Hulk; Thor; Natasha Romanoff, a.k.a. Black Widow; and Clint Barton, a.k.a. Hawkeye, to save the
-                    world from the powerful Loki and the alien invasion.</p>
+                <p>Earth's mightiest heroes must come together and learn to fight as a team if they are going to stop
+                    the mischievous Loki and his alien army from enslaving humanity.</p>
 
                 <p>The avengers is an action movie, which many would consider as "happy", mainly because of all the
                     special effects and the entertaining visuals it has.
                     As many other action movies, it has less "talking" and a lot of fights between good and evil.
-                    The talking are usually goal oriented, and uses terms like "fight", "destroy" and "kill" which may
+                    The talking is usually goal oriented, and uses terms like "fight", "destroy" and "kill" which may
                     be interpreted as negative.
                     Based on this we can see why it got a low score, but we have to remember that if we take away the
                     amusing part
@@ -221,7 +218,7 @@
                     that the dramatic nature of the language stays.
                     This tells us a lot about how we interpret emotion and what is positive and negative to us, but also
                     shows us
-                    that sentiment analysis is no joke :)</p>
+                    that sentiment analysis is no joke.</p>
 
                 <h2 class="section-heading">Pirates of the Caribbean</h2>
                 <img class="img-fluid" src="../static/pirates_of_the_caribbean.jpg"/>
@@ -242,6 +239,51 @@
                     the other hand, it has a lot of fights and dramatic moments.
                     The mix of the two can explain why it got a pretty neutral score - which is also pretty
                     accurate.</p>
+
+                <h2 class="section-heading text-center">How It All Works</h2>
+
+                <p> In this section, we will try to explain how our algorithm works. It is pretty complex as a whole,
+                    but when simplified
+                    and divided into sub-components you should get it right away.
+                    <br>
+                    The sub components we are referring to are:</p>
+                <ul>
+                    <li>The TMDB API component</li>
+                    <li>The Open Subtitles API component</li>
+                    <li>The Sentiment Analysis component</li>
+                    <li>The Welford's Algorithm component</li>
+                </ul>
+                <p> These all get called in the specified order (from top to bottom), and stop only if there is an
+                    exception along the way.</p>
+
+                <h2 class="section-heading">The TMDB API component</h2>
+                <p> This component is pretty straightforward. It receives a movie name that the user types in the UI,
+                    and calls the search on the TMDB API with that name, and returns a dictionary of movie related data
+                    such as the image, plot, genre, release date and the IMDB ID that will be used later by the
+                    following components.</p>
+
+
+                <h2 class="section-heading">The Open Subtitles API component</h2>
+                <p> After the movie results are presented to the user and he chooses the movie he wants to analyze,
+                    the server calls the Open Subtitles API with the IMDB ID of the chosen movie, and picks the subtitle
+                    file that was most highly ranked
+                    and makes sure it's format is correct and that it is in the english language. If the component can't
+                    find a subtitle of the chosen movie or
+                    if the download fails for some reason, an exception is thrown to the UI.</p>
+
+                <h2 class="section-heading">The Sentiment Analysis component</h2>
+                <p> This component is the heart of all our work. It uses TextBlob, which is a well known and easy to use
+                    python library for processing textual data,
+                    and has sentiment analysis support in particular, which is exactly what we
+                    needed.<br>
+                    This component has 4 steps:</p>
+                <ul>
+                    <li>Collect the subtitles and their time intervals from the srt file</li>
+                    <li>Divide the total movie running time into constant time intervals</li>
+                    <li>Collect and combine all of the text in each time interval</li>
+                    <li>Find the sentiment polarity of the text in each time interval</li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -254,6 +296,16 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="https://github.com/GuyShuster/FeelM" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
                 <p class="copyright text-muted">Copyright &copy; FeelM 2020</p>
             </div>
         </div>

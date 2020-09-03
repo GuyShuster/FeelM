@@ -1,6 +1,5 @@
 from datetime import date, datetime, timedelta, time
 from textblob import TextBlob
-import seaborn as sns
 import re
 import functools
 
@@ -18,9 +17,6 @@ class SubtitleParsingException(Exception):
         super().__init__()
 
 ########################################################################################################################
-
-
-sns.set()
 
 
 def create_subs_array(filename, encoding):

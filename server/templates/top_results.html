@@ -79,39 +79,70 @@
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
 
-                <p>Happiest Movie:</p>
-
-                <p>Average Sentiment Score: {{movies[0]['score']}}</p>
-                <p>{{ movies[0]['title'] }}</p>
-                <img src="{{ movies[0]['image'] }}">
-                <p>{{ movies[0]['plot'] }}</p>
-                <p>{{ movies[0]['description'] }}</p>
-
-                <p>Saddest Movie:</p>
-
-                <p>Average Sentiment Score: {{movies[1]['score']}}</p>
-                <p>{{ movies[1]['title'] }}</p>
-                <img src="{{ movies[1]['image'] }}">
-                <p>{{ movies[1]['plot'] }}</p>
-                <p>{{ movies[1]['description'] }}</p>
-
                 <h2 class="section-heading">Genres Comparison</h2>
-
+                <img src="../static/genres_comparison.jpeg"/>
                 <p>Based on TMDB, we tried to predict genres average sentiment score and compare between them.</p>
-                <img class="img-fluid" src="../static/genres_comparison.jpeg"/>
                 <p>
-                    As we can see in the graph, all the green genres are predicted to be happy based on our
-                    algorithm and all the red genres are predicted to be sad.
+                    As we can see in the graph, all the green genres are predicted to be positive and all the
+                    red genres are predicted to be more negative.
                     As we assumed, Comedy is up there at the 2nd place, with Documentary being the top one,
                     and also Adventure, Fantasy and Romance lead behind them,
                     while Crime, Horror and War placed at the bottom.
                 </p>
                 <p>
                     The Sentiment Analysis pretty much matched with our assumption.
+                    We can learn from it that there is actually a clear distinction between movies from
+                    different genres that the algorithm predicted correctly.
+                </p>
+
+                <h2 class="section-heading">Most Positive - Hachi: A Dog's Tale:</h2>
+
+                <img class="img-fluid" src="../static/hachi.jpg">
+                <p class="text-center" style="font-weight:bold;">Score: 0.2891444259892686</p>
+
+                <p>A drama based on the true story of a college professor's bond
+                    with the abandoned dog he takes into his home.</p>
+
+                <p>
+                    The movie with the highest score, Hachi: A Dog's Tale, is one of the most exciting films
+                    we have came across. It shows the deep connection and loyalty between professor Parker and
+                    his dog Hachi. Based on a true story, one can't have his eyes dry after watching this.
                 </p>
                 <p>
-                    We can learn from it that there is actually a clear distinction between movies from
-                    different genres that our algorithm could predict correctly.
+                    With no surprise, the algorithm couldn't be more accurate giving this movie the highest
+                    score amongst the most popular movies on IMDB.
+                </p>
+
+                <h2 class="section-heading">Most Negative - Platoon:</h2>
+                <img class="img-fluid" src="../static/platoon.jpg">
+                <p class="text-center" style="font-weight:bold;">Score: -0.051241804744516437</p>
+
+                <p>As a young and naive recruit in Vietnam, Chris Taylor faces
+                    a moral crisis when confronted with the horrors of war and the duality of man.</p>
+
+
+                <p>
+                    The movie with the lowest score, Platoon, is very violent and
+                    hard to watch. It covers moral dilemmas of soldiers fighting in guerrilla wars.
+                    While this movie shows the hard reality in an amazing way, the algorithm was on-point
+                    giving this one the lowest score amongst the most popular movies.
+                </p>
+
+                <h2 class="section-heading">Extra Results</h2>
+                <img class="img-fluid" style="height: 400px;" src="../static/max_movies.jpeg"/>
+                <p>
+                    Out of IMDB's top 250 movies, these are the 10 most positive one's.
+                    As we previously saw, Hachi: A Dog's Tale is NO.1 on this list, but the other one's are
+                    considered very positive and happy movies as well.
+                </p>
+                <img class="img-fluid" style="height: 400px;" src="../static/min_movies.jpeg"/>
+                <p>
+                    And finally, out of IMDB's top 250 movies, these are the 10 most negative one's.
+                    All of the movies in this list except The Big Lebowski, are generally considered as pretty intense.
+                    If you think about it, although the story about Lebowski is a comedy, it has a lot of kidnapping,
+                    shooting,
+                    drugs and violence involved. It is actually considered a crime movie besides being a classic comedy,
+                    and our algorithm was able to identify that fact.
                 </p>
 
             </div>
@@ -126,6 +157,16 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
+                <ul class="list-inline text-center">
+                    <li class="list-inline-item">
+                        <a href="https://github.com/GuyShuster/FeelM" target="_blank">
+                            <span class="fa-stack fa-lg">
+                                <i class="fas fa-circle fa-stack-2x"></i>
+                                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
                 <p class="copyright text-muted">Copyright &copy; FeelM 2020</p>
             </div>
         </div>

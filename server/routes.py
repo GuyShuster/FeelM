@@ -24,20 +24,17 @@ def predict_sentiment(movie_id, avg_score):
     """ Gets an average score for the current movie, and predicts it's sentiment based on previous movie searches """
     try:
         if db.session.query(SentimentHistory).filter(SentimentHistory.movie_imdb_id == movie_id).count() == 0:
-            welfords_algorithm.add(avg_score)  # if the movie wasn't already in the average score, add it
+            session['welford']([avg_score])  # if the movie wasn't already in the average score, add it
             data = SentimentHistory(movie_id, avg_score)
             db.session.add(data)
             if len(db.session.query(SentimentHistory).all()) > 9500:  # Heroku allows about 10000 rows on the free plan
                 db.session.delete(db.session.query(SentimentHistory).first())
-                # keep the average score updated to the latest movies
-                welfords_algorithm.initialize([movie.movie_score for movie in db.session.query(SentimentHistory).all()])
-
             db.session.commit()
     except Exception:
         raise DBException()
 
-    mean = welfords_algorithm.welfrod.mean
-    std = welfords_algorithm.welfrod.std
+    mean = session['welford'].mean
+    std = session['welford'].std
 
     # normal distribution weights
     very_negative = 0.2
@@ -80,7 +77,21 @@ def index():
 
     if request.method == 'GET':
         #  Each time a user accesses the website, we want to "freshly" log in and initialize the default searched movies
+        #  and keep welfor's algorithm initialized to the mose recent movies in the DB
+
         session['searched_movies'] = defaults.default_movies
+        session['welford'] = welfords_algorithm.Welford()
+
+        try:
+            session['welford']([movie.movie_score for movie in db.session.query(SentimentHistory).all()])
+        except Exception:
+            error_message = '''There seems to be a problem with our database.
+                        Please try to reload the page in a couple of minutes.
+                        If this message shows up again, please raise an issue on our github repository 
+                        (link at the bottom of this page).'''
+            return render_template('index.html', movies=session['searched_movies'], graph_data=defaults.default_graph,
+                                   error_message=error_message)
+
         ost_script.login(os.environ.get('OST_USER'), os.environ.get('OST_PASSWORD'))
         if not ost_script.logged_in:
             error_message = '''We could not log in to the Open Subtitles API.
