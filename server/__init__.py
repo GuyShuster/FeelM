@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from server import tmdb_script, ost_script, defaults, welfords_algorithm
 import os
 
-ENV = 'dev'  # DON'T FORGET TO CHANGE TO prod WHEN DEPLOYING TO A PRODUCTION SERVER
+ENV = 'prod'  # DON'T FORGET TO CHANGE TO prod WHEN DEPLOYING TO A PRODUCTION SERVER
 app = Flask(__name__)
 SESSION_TYPE = 'filesystem'  # store session related data on the file system for security and efficiency
 app.config.from_object(__name__)
